@@ -18,6 +18,33 @@ class Parser
   def get_protocol
     "Protocol: #{request[0].split[2]}"
   end
+
+  def get_host
+    "Host:#{request[1].split(":")[1]}"
+  end
+
+  def get_port
+    "Port: #{request[1].split(":")[2]}"
+  end
+
+  def get_origin
+    "Origin:#{request[1].split(":")[1]}"
+  end
+
+  def get_accept
+    "Accept:#{request[2].split(":")[1]}"
+  end
+
+  def final_response
+    get_verb + ("\n") +
+    get_path + ("\n") +
+    get_protocol + ("\n") +
+    get_host + ("\n") +
+    get_port + ("\n") +
+    get_origin + ("\n") +
+    get_accept
+  end
+
   # def parse_request
   #   verb = [] #contains only the text that would go after "Verb:"
   #   first_el_split = request[0].split(" ")
