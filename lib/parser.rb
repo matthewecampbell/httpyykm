@@ -1,53 +1,54 @@
+
 require 'pry'
 
 class Parser
-  attr_reader :request
+  attr_reader :request_lines
 
-  def initialize(request)
-    @request = request
+  def initialize(request_lines)
+    @request_lines = request_lines
   end
 
   def get_verb
-    "Verb: #{request[0].split[0]}"
+    "Verb: #{request_lines[0].split[0]}"
   end
 
   def get_path
-    "Path: #{request[0].split[1]}"
+    "Path: #{request_lines[0].split[1]}"
   end
 
   def get_protocol
-    "Protocol: #{request[0].split[2]}"
+    "Protocol: #{request_lines[0].split[2]}"
   end
 
   def get_host
-    "Host:#{request[1].split(":")[1]}"
+    "Host:#{request_lines[1].split(":")[1]}"
   end
 
   def get_port
-    "Port: #{request[1].split(":")[2]}"
+    "Port: #{request_lines[1].split(":")[2]}"
   end
 
   def get_origin
-    "Origin:#{request[1].split(":")[1]}"
+    "Origin:#{request_lines[1].split(":")[1]}"
   end
 
   def get_accept
-    "Accept:#{request[2].split(":")[1]}"
+    "Accept:#{request_lines[2].split(":")[1]}"
   end
 
   def final_response
-    get_verb + ("\n") +
+    ("\n") + get_verb + ("\n") +
     get_path + ("\n") +
     get_protocol + ("\n") +
     get_host + ("\n") +
     get_port + ("\n") +
     get_origin + ("\n") +
-    get_accept
+    get_accept + ("\n")
   end
 
-  # def parse_request
+  # def parse_request_lines
   #   verb = [] #contains only the text that would go after "Verb:"
-  #   first_el_split = request[0].split(" ")
+  #   first_el_split = request_lines[0].split(" ")
   #   verb << first_el_split[0]
   #   "Verb: #{verb.join}"
   # end
@@ -58,17 +59,17 @@ class Parser
   #   counter += 1
   #   client = tcp_server.accept
   #
-  #   puts "Ready for a request"
-  #   request_lines = []
+  #   puts "Ready for a request_lines"
+  #   request_lines_lines = []
   #
   #   while line = client.gets and !line.chomp.empty?
-  #     request_lines << line.chomp
+  #     request_lines_lines << line.chomp
   #   end
   #
-  #   puts "Got this request:"
-  #   puts request_lines.inspect
+  #   puts "Got this request_lines:"
+  #   puts request_lines_lines.inspect
   #   puts "Sending response."
-  #   response = "<pre>" + request_lines.join("\n") + "</pre>"
+  #   response = "<pre>" + request_lines_lines.join("\n") + "</pre>"
   #
   #   output = "<html><head></head><body>#{response}</body></html>"
   #   headers = ["http/1.1 200 ok",
