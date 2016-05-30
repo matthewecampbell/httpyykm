@@ -2,7 +2,7 @@ require 'socket'
 require './lib/parser'
 require "pry"
 
-class Server
+# class Server
 # attr_reader       :tcp_server, :counter
 # attr_accessor     :request_lines, :client
 
@@ -44,35 +44,35 @@ class Server
   #   end
   # end
 
-  def combined
-    @tcp_server    = TCPServer.new(9292) #---> possibly make this TCP.Server.new(9292).accept
-    @counter = 0
-    @hello_counter = 0
+  # def combined
+    tcp_server    = TCPServer.new(9292) #---> possibly make this TCP.Server.new(9292).accept
+    counter = 0
+    hello_counter = 0
     loop do
-      @counter += 1
-      @client = @tcp_server.accept
-      @request_lines = []
-      while line = @client.gets and !line.chomp.empty?
-        @request_lines << line.chomp
+      counter += 1
+      client = tcp_server.accept
+      request_lines = []
+      while line = client.gets and !line.chomp.empty?
+        request_lines << line.chomp
       end
-      response = "<pre>" + Parser.new(@request_lines).final_response + "</pre>"
+      response = "<pre>" + Parser.new(request_lines).final_response + "</pre>"
       if response == "<pre>Hello, World</pre>"
-        @hello_counter += 1
-        response = "<pre>Hello, World #{@hello_counter}</pre>"
+        hello_counter += 1
+        response = "<pre>Hello, World #{hello_counter}</pre>"
       elsif response == "<pre>Total Requests:</pre>"
-        response = "<pre>Total Requests: #{@counter}</pre>"
-        @tcp_server.close
+        response = "<pre>Total Requests: #{counter}</pre>"
+        tcp_server.close
       end
         output = "<html><head></head><body>#{response}</body></html>"
-    @client.puts output
-    @client.close
+    client.puts output
+    client.close
     end
-  end
+  # end
 
-end
+# end
 
-server = Server.new
-server.combined
+# server = Server.new
+# server.combined
 
 
 # parser = Parser.new(server.receive_request)
