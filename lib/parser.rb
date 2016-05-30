@@ -1,4 +1,5 @@
 require 'pry'
+require "./lib/router"
 
 class Parser
   attr_reader :request_lines
@@ -12,8 +13,8 @@ class Parser
   end
 
   def get_path
-    # Router.new({request_lines[0].split[1]})
-    "Path: #{request_lines[0].split[1]}"
+    router = Router.new(request_lines[0].split[1])
+    router.determine_path
   end
 
   def get_protocol
@@ -43,13 +44,17 @@ class Parser
   end
 
   def final_response
-    ("\n") + get_verb + ("\n") +
-    get_path + ("\n") +
-    get_protocol + ("\n") +
-    get_host + ("\n") +
-    get_port + ("\n") +
-    get_origin + ("\n") +
-    get_accept + ("\n")
+    if get_path == "/"
+      ("\n") + get_verb + ("\n") +
+      "Path: #{get_path}" + ("\n") +
+      get_protocol + ("\n") +
+      get_host + ("\n") +
+      get_port + ("\n") +
+      get_origin + ("\n") +
+      get_accept + ("\n")
+    else
+      get_path
+    end
   end
 
   # def parse_request_lines

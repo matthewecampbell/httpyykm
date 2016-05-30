@@ -1,8 +1,9 @@
 require 'socket'
 require './lib/parser'
+require "pry"
 
 class Server
-attr_reader       :tcp_server
+attr_reader       :tcp_server, :counter
 attr_accessor     :request_lines, :client
 
   def initialize
@@ -23,16 +24,27 @@ attr_accessor     :request_lines, :client
     puts @request_lines.inspect
     puts "Sending response."
     response = "<pre>" + Parser.new(@request_lines).final_response + "</pre>"
-    # we are going to chain our methods in Parser and call it here - i.e. final reponse in above line
-    # we know that Parser.new(request).final_response is a nicely formatted string with new lines already inside
-    output = "<html><head></head><body>#{response}hellyeah</body></html>"
+      if response == "<pre>Hello, World</pre>"
+        response = "<pre>Hello, World #{@counter}</pre>"
+      end
+        output = "<html><head></head><body>#{response}</body></html>"
     @client.puts output
-    @client.close
   end
+
+  def open_server
+    @counter = 0
+    loop do
+      @counter += 1
+      receive_request
+      respond_to_client
+      @client.close
+    end
+  end
+
 end
 
 server = Server.new
-server.receive_request
-server.respond_to_client
+server.open_server
+
 
 # parser = Parser.new(server.receive_request)
