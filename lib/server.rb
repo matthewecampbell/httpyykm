@@ -19,6 +19,9 @@ attr_accessor     :request_lines, :client
   end
 
   def respond_to_client
+    puts "Got this request:"
+    puts @request_lines.inspect
+    puts "Sending response."
     response = "<pre>" + Parser.new(@request_lines).final_response + "</pre>"
     # we are going to chain our methods in Parser and call it here - i.e. final reponse in above line
     # we know that Parser.new(request).final_response is a nicely formatted string with new lines already inside

@@ -33,7 +33,13 @@ class Parser
   end
 
   def get_accept
-    "Accept:#{request_lines[2].split(":")[1]}"
+    accept = ""
+    request_lines.each do |element|
+      if element.include?("Accept:")
+      accept += element
+      end
+    end
+    "Accept:#{accept.split(":")[1]}"
   end
 
   def final_response
