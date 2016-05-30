@@ -1,4 +1,3 @@
-
 require 'pry'
 
 class Parser
@@ -13,6 +12,7 @@ class Parser
   end
 
   def get_path
+    # Router.new({request_lines[0].split[1]})
     "Path: #{request_lines[0].split[1]}"
   end
 
