@@ -19,14 +19,14 @@ end
 
 def check_dictionary
   response = ""
-  word = path.split("=")[1] + ("\n")
+  word = path.split("=")[1]
   answer = File.readlines("/usr/share/dict/words").one? do |element|
-    element == word
+    element.chomp.upcase == word.upcase
   end
   if answer == true
-    response += "#{word.chomp} is a known word"
+    response += "#{word} is a known word"
   elsif answer == false
-    response += "#{word.chomp} is not a known word"
+    response += "#{word} is not a known word"
   end
   response
 end
