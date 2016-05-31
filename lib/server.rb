@@ -39,6 +39,3 @@ def start
   end
 end
 end
-
-server = Server.new
-server.start
