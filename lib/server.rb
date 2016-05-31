@@ -1,6 +1,7 @@
 require 'socket'
 require './lib/parser'
 require "pry"
+
 class Server
 attr_reader       :request_lines, :tcp_server
 
