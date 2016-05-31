@@ -1,38 +1,43 @@
 require 'socket'
 require './lib/parser'
-
+require "pry"
 class Server
-attr_reader       :tcp_server
-attr_accessor     :request_lines, :client
+attr_reader       :request_lines, :tcp_server
 
-  def initialize
-    @tcp_server    = TCPServer.new(9292) #---> possibly make this TCP.Server.new(9292).accept
-  end
+def initialize
+  @tcp_server     = TCPServer.new(9292)
+  @parser         = Parser.new
+end
 
-  def receive_request
-    @client = tcp_server.accept
-    @request_lines = []
+def start
+  hello_counter   = 0
+  counter         = 0
+  loop do
+    client = @tcp_server.accept
+    request_lines = []
     while line = client.gets and !line.chomp.empty?
-      @request_lines << line.chomp
+    request_lines << line.chomp
     end
-    @request_lines
-  end
-
-  def respond_to_client
     puts "Got this request:"
-    puts @request_lines.inspect
+    puts request_lines.inspect
     puts "Sending response."
-    response = "<pre>" + Parser.new(@request_lines).final_response + "</pre>"
-    # we are going to chain our methods in Parser and call it here - i.e. final reponse in above line
-    # we know that Parser.new(request).final_response is a nicely formatted string with new lines already inside
-    output = "<html><head></head><body>#{response}hellyeah</body></html>"
-    @client.puts output
-    @client.close
+    counter += 1
+    response = @parser.final_response(request_lines)
+    if response == "Hello, World"
+      hello_counter += 1
+      client.puts "<html><head></head><body><pre>Hello, World #{hello_counter}</pre></body></html>"
+      client.close
+    elsif response == "Total Requests:"
+      client.puts "<html><head></head><body><pre>Total Requests: #{counter}</pre></body></html>"
+      client.close
+      @tcp_server.close
+    else
+      client.puts "<html><head></head><body><pre>#{response}</pre></body></html>"
+      client.close
+    end
   end
+end
 end
 
 server = Server.new
-server.receive_request
-server.respond_to_client
-
-# parser = Parser.new(server.receive_request)
+server.start

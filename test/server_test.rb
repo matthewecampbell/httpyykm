@@ -3,6 +3,6 @@ require "minitest/pride"
 require "./lib/server"
 require "pry"
 
-class ServerTest
+class ServerTest < Minitest::Test
 
 end
