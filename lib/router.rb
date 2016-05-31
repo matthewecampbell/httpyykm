@@ -10,7 +10,7 @@ def initialize(path)
 end
 
 def determine_path
-  if path.include?("/word_search?=")
+  if path.include?("/word_search?word=")
     check_dictionary
   else
    hash[path]

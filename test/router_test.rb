@@ -17,8 +17,9 @@ class RouterTest < Minitest::Test
     assert_equal "Hello, World", router.determine_path
   end
 
-  def test_if_path_is_word_search
-    router = Router.new("/word_search?word=horses")
-
-    assert_equal "horses", router.check_dictionary
+  # def test_if_path_is_word_search
+  #   router = Router.new("/word_search?word=horses")
+  #
+  #   assert_equal "horses", router.check_dictionary
+  # end
 end
