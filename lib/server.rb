@@ -18,6 +18,9 @@ def start
     while line = client.gets and !line.chomp.empty?
     request_lines << line.chomp
     end
+    puts "Got this request:"
+    puts request_lines.inspect
+    puts "Sending response."
     counter += 1
     response = @parser.final_response(request_lines)
     if response == "Hello, World"
