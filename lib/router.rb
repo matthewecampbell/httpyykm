@@ -24,9 +24,9 @@ def check_dictionary
     element == word
   end
   if answer == true
-    response += "#{word} is a known word"
+    response += "#{word.chomp} is a known word"
   elsif answer == false
-    response += "#{word} is not a known word"
+    response += "#{word.chomp} is not a known word"
   end
   response
 end
