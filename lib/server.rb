@@ -26,19 +26,32 @@ def start
     response = @parser.final_response(request_lines)
     if response == "Hello, World"
       hello_counter += 1
-      client.puts "<html><head></head><body><pre>Hello, World #{hello_counter}</pre></body></html>"
+      output =
+      client.puts ["http/1.1 200 ok",
+                "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+                "server: ruby",
+                "content-type: text/html; charset=iso-8859-1",
+                "content-length: #{"<html><head></head><body><pre>Hello, World #{hello_counter}</pre></body></html>".length}\r\n\r\n"].join("\r\n")
+      client.puts  "<html><head></head><body><pre>Hello, World #{hello_counter}</pre></body></html>"
       client.close
     elsif response == "Total Requests:"
+      client.puts ["http/1.1 200 ok",
+                "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+                "server: ruby",
+                "content-type: text/html; charset=iso-8859-1",
+                "content-length: #{"<html><head></head><body><pre>Total Requests: #{counter}</pre></body></html>".length}\r\n\r\n"].join("\r\n")
       client.puts "<html><head></head><body><pre>Total Requests: #{counter}</pre></body></html>"
       client.close
       @tcp_server.close
     else
+      client.puts ["http/1.1 200 ok",
+                "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+                "server: ruby",
+                "content-type: text/html; charset=iso-8859-1",
+                "content-length: #{"<html><head></head><body><pre>#{response}</pre></body></html>".length}\r\n\r\n"].join("\r\n")
       client.puts "<html><head></head><body><pre>#{response}</pre></body></html>"
       client.close
     end
   end
 end
 end
-
-server = Server.new
-server.start

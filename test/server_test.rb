@@ -23,15 +23,9 @@ attr_reader      :conn
     assert_equal Hash.new, conn.params
   end
 
-  # # def test_return_output_which_is_parsed_and_formatted_request
-  # #   assert_equal "User-Agent"=>"Faraday v0.9.2", conn.headers
-  # # end
-  #
-  # def test_faraday_connects
-  #   skip
-  #   connection = Faraday.new(:url => "http://127.0.0.1:9292/")
-  #   connection.get'/hello'
-  #   # assert_equal "Hello, World", faraday.response
-  # end
+  def test_faraday_connects
+    connection = Faraday.get("http://127.0.0.1:9292/hello")
+    assert_equal 200, connection.status
+  end
 
 end
