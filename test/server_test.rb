@@ -1,6 +1,6 @@
 require "minitest/autorun"
 require "minitest/pride"
-require "./lib/server"
+require "./lib/stuff"
 require 'faraday'
 require "pry"
 
@@ -27,5 +27,7 @@ attr_reader      :conn
     connection = Faraday.get("http://127.0.0.1:9292/hello")
     assert_equal 200, connection.status
   end
+
+  def 
 
 end
