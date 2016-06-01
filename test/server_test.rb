@@ -18,22 +18,27 @@ attr_reader      :conn #, :connection
   #   assert_equal 1, connection.headers
   # end
 
-  def setup
-    @conn = Faraday::Connection.new "http://127.0.0.1:9292/"
+  def test_get_root
+    Faraday.get("http://127.0.0.1:9292")
   end
 
 
-  def test_initialize_parses_host_out_of_given_url
-  assert_equal '127.0.0.1', conn.host
-  end
-
-  def test_port_is_9292
-    assert_equal 9292, conn.port
-  end
-
-  def test_prefix
-    assert_equal Hash.new, conn.params
-  end
+  # def setup
+  #   @conn = Faraday::Connection.new "http://127.0.0.1:9292/"
+  # end
+  #
+  #
+  # def test_initialize_parses_host_out_of_given_url
+  # assert_equal '127.0.0.1', conn.host
+  # end
+  #
+  # def test_port_is_9292
+  #   assert_equal 9292, conn.port
+  # end
+  #
+  # def test_prefix
+  #   assert_equal Hash.new, conn.params
+  # end
 
 
   # def test_return_output_which_is_parsed_and_formatted_request
