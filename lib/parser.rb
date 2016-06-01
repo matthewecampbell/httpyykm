@@ -9,7 +9,7 @@ class Parser
   end
 
   def get_path(request_lines)
-    router = Router.new(request_lines[0].split[1])
+    router = Router.new(request_lines[0].split[0], request_lines[0].split[1])
     router.determine_path
   end
 
