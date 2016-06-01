@@ -17,9 +17,13 @@ class Server
       counter += 1
       client = @tcp_server.accept
       request_lines = []
+      client.read(2).to_i
       while line = client.gets and !line.chomp.empty?
         request_lines << line.chomp
       end
+      num = @parser.get_content_length(request_lines)
+      puts client.read(num)
+      binding.pry
       puts "Got this request:"
       puts request_lines.inspect
       puts "Sending response."

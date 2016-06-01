@@ -11,7 +11,8 @@ class Router
 def initialize(verb, path)
   @verb              = verb
   @path              = path
-  @hash              = {"/" => "/", "/hello" => "Hello, World", "/datetime" => Time.now.strftime("%I:%M%p on %A, %b %e, %Y"), "/shutdown" => "Total Requests:", "/start_game" => "Good luck!"}
+  @game              = Game.new
+  @hash              = {"/" => "/", "/hello" => "Hello, World", "/datetime" => Time.now.strftime("%I:%M%p on %A, %b %e, %Y"), "/shutdown" => "Total Requests:", "/start_game" => "Good luck!", "/game?guess" => "redirect"}
 end
 
 def determine_path
@@ -20,8 +21,9 @@ def determine_path
   elsif path.include?("/start_game") && verb == "POST"
     start_game
     hash[path]
-  elsif path.include?("/game?guess=") && verb == "POST"
-    game.guesses << path.split("=")[1]
+  elsif path.include?("/game?guess") && verb == "POST"
+    @game.record_guess(path.split("=")[1])
+    hash[path.split("=")[0]]
   else
    hash[path]
   end

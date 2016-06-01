@@ -14,4 +14,5 @@ class GameTest < Minitest::Test
     assert_equal "3", game.guesses.last
   end
 
+
 end
