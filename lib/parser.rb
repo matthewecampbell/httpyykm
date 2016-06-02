@@ -70,10 +70,6 @@ class Parser
   end
   end
 
-  def pass_guess(guess)
-    server.router.accept_guess(guess)
-  end
-
   def redirect
     "HTTP/1.1 301 Moved Permanently
     Location: http://127.0.0.1:9292/game

@@ -1,18 +1,20 @@
 require 'socket'
-require './lib/parser'
 require './lib/router'
+require './lib/parser'
+require './lib/game'
 require "pry"
 
 class Server
-  attr_reader       :request_lines,
-                    :tcp_server,
-                    :router
+  attr_reader       :tcp_server,
+                    :router,
+                    :parser,
+                    :game
 
   def initialize
     @tcp_server     = TCPServer.new(9292)
     @router         = Router.new
     @parser         = Parser.new(self)
-    #@game?
+    @game           = Game.new
   end
 
   def start
@@ -25,13 +27,21 @@ class Server
       while line = client.gets and !line.chomp.empty?
         request_lines << line.chomp
       end
-      # num = @parser.get_content_length(request_lines)
-      # guess = client.read(num).split(" ")[4].to_i
+      verb = request_lines[0].split[0]
+      path = request_lines[0].split[1]
+      num = @parser.get_content_length(request_lines)
+      read_client = client.read(num).split(" ")[4]
+      if read_client != nil
+        guess = read_client.to_i
+        if router.determine_path(verb, path, guess) == "Valid POST for /game"
+          game.record_guess(guess)
+          binding.pry
+        end
+      end
       puts "Got this request:"
       puts request_lines.inspect
       puts "Sending response."
       response = @parser.final_response(request_lines)
-      # @parser.pass_guess(guess)
       if response == "Hello, World"
         hello_counter += 1
         output = find_output("Hello, World", hello_counter)

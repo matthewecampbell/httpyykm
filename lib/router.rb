@@ -4,25 +4,21 @@ require "pry"
 class Router
   attr_reader       :verb,
                     :path,
-                    :hash,
-                    :game
+                    :hash
 
   def initialize
-    @game              = Game.new
     @hash              = {"/" => "/", "/hello" => "Hello, World", "/datetime" => Time.now.strftime("%I:%M%p on %A, %b %e, %Y"), "/shutdown" => "Total Requests:", "/start_game" => "Good luck!", "/game?guess" => "redirect"}
   end
 
-  def determine_path(verb, path)
+  def determine_path(verb, path, guess = nil)
     if path.include?("/word_search?word=")
       check_dictionary(path)
     elsif path.include?("/start_game") && verb == "POST"
       hash[path]
     elsif path.include?("/game") && verb == "GET"
       game.check_guess_count
-    elsif path.include?("/game") && verb == "POST"
-      # binding.pry
-      game.record_guess(path.split("=")[1])
-      hash[path.split("=")[0]]
+    elsif path.include?("/game") && verb == "POST" && guess != nil
+      "Valid POST for /game"
     else
      hash[path]
     end
@@ -42,8 +38,5 @@ class Router
     response
   end
 
-  def accept_guess(guess)
-    @game.compare_guess(guess)
-  end
 
 end
