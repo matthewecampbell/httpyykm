@@ -31,7 +31,7 @@ class Router
     end
   end
 
-  def check_dictionary(path)
+  def check_dictionary(path)#put method in module - or maybe new WordSearch class
     response = ""
     word = path.split("=")[1]
     answer = File.readlines("/usr/share/dict/words").one? do |element|

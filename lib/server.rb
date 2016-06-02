@@ -3,15 +3,16 @@ require './lib/router'
 require './lib/parser'
 require './lib/game'
 require "pry"
-
+# make header module in different file - within module you write methods to be .self
 class Server
+  #intherit module
   attr_reader       :tcp_server,
                     :router,
                     :parser,
-                    :game
-                    :verb
-                    :path
-                    :guess
+                    :game #do we need these?
+                    :verb #
+                    :path #
+                    :guess #
 
   def initialize
     @tcp_server     = TCPServer.new(9292)
@@ -23,17 +24,19 @@ class Server
   def start
     hello_counter   = 0
     counter         = 0
-    loop do
+    #sever_running
+    loop do #everything inside the loop can be a separate class, initialize with the loop, grab request_lines and then call Parser class - really shortners this start method
       counter += 1
       client = @tcp_server.accept
       request_lines = []
       while line = client.gets and !line.chomp.empty?
         request_lines << line.chomp
-      end #want to make method here to line 39
+      end #want to make method here to line 39 - Chris agrees - need to pass in arguments request_lines, client,
       @verb = request_lines[0].split[0]
       @path = request_lines[0].split[1]
       num = @parser.get_content_length(request_lines)
       read_client = client.read(num).split(" ")[4]
+      # break into two smaller methods = end at 43 (client)
       if read_client != nil && game.game_start
         @guess = read_client.to_i
         if router.determine_path(@verb, @path, @guess) == "Valid POST for /game"
@@ -52,6 +55,7 @@ class Server
       else
         output  = find_output(response, nil)
       end
+      # this can be a different output (pass output and client into method to end) definitely test first
       client.puts header(output)
       client.puts output
       client.close
@@ -59,10 +63,11 @@ class Server
     end
   end
 
+# make this a module
   def header(output)
     if router.determine_path(@verb, @path, @guess) == "Valid POST for /game"
-    ["http/1.1 301 Moved Permanently",
-      "Location: http://127.0.0.1:9292/game",
+    ["http/1.1 301 Moved Permanently",#make status code and message one argument
+      "Location: http://127.0.0.1:9292/game", #argmuent
       "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
       "server: ruby",
       "content-type: text/html; charset=iso-8859-1",

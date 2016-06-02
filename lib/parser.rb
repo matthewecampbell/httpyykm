@@ -54,8 +54,7 @@ class Parser
   end
 
   def final_response(request_lines)
-    if get_path(request_lines) == "/"
-      ("\n") + get_verb(request_lines) + ("\n") +
+    if ("\n") +
       "Path: #{get_path(request_lines)}" + ("\n") +
       get_protocol(request_lines) + ("\n") +
       get_host(request_lines) + ("\n") +
@@ -66,4 +65,8 @@ class Parser
       get_path(request_lines)
     end
   end
+end
+
+if __FILE__ == $0
+ parser = Parser.new(Server.new)
 end
