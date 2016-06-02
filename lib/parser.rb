@@ -1,3 +1,4 @@
+require "./lib/server"
 require 'pry'
 
 class Parser
@@ -14,6 +15,7 @@ class Parser
   end
 
   def get_path(request_lines)
+    binding.pry
     server.router.determine_path(request_lines[0].split[0], request_lines[0].split[1])
   end
 
@@ -65,8 +67,4 @@ class Parser
       get_path(request_lines)
     end
   end
-end
-
-if __FILE__ == $0
- parser = Parser.new(Server.new)
 end

@@ -9,8 +9,8 @@ class ParserTest < Minitest::Test
   attr_reader :parser, :request_lines, :server, :router
 
   def parser_possibilities
-    @parser = Parser.new(self)
-    @router = Router.new(self)
+    @parser = Parser.new(server)
+
     @request_lines = (["POST / HTTP/1.1", "Host: 127.0.0.1:9292", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,​*/*​;q=0.8", "Accept-Language: en-us", "Connection: keep-alive", "Accept-Encoding: gzip, deflate", "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/601.6.17 (KHTML, like Gecko) Version/9.1.1 Safari/601.6.17"])
   end
 
@@ -63,30 +63,26 @@ class ParserTest < Minitest::Test
   end
 
   def test_final_response_if_path_hello
-    skip
-    parser = Parser.new(self)
-    router = Router.new(self)
+    parser_possibilities
 
     assert_equal "Hello, World", parser.final_response(["POST /hello HTTP/1.1", "Host: 127.0.0.1:9292", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,​*/*​;q=0.8", "Accept-Language: en-us", "Connection: keep-alive", "Accept-Encoding: gzip, deflate", "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/601.6.17 (KHTML, like Gecko) Version/9.1.1 Safari/601.6.17"])
   end
 
   def test_final_response_if_path_datetime
-    parser = Parser.new(self)
+    parser_possibilities
 
     assert_instance_of String, parser.final_response(["POST /datetime HTTP/1.1", "Host: 127.0.0.1:9292", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,​*/*​;q=0.8", "Accept-Language: en-us", "Connection: keep-alive", "Accept-Encoding: gzip, deflate", "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/601.6.17 (KHTML, like Gecko) Version/9.1.1 Safari/601.6.17"])
   end
 
   def test_final_response_if_path_shutdown
-    skip
-    parser = Parser.new(self)
-    router = Router.new(self)
+    parser_possibilities
 
     assert_equal "Total Requests:", parser.final_response(["POST /shutdown HTTP/1.1", "Host: 127.0.0.1:9292", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,​*/*​;q=0.8", "Accept-Language: en-us", "Connection: keep-alive", "Accept-Encoding: gzip, deflate", "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/601.6.17 (KHTML, like Gecko) Version/9.1.1 Safari/601.6.17"])
   end
 
   def test_get_verb_if_post_and_path_include_start_game
-    server = Server.new
-    parser = Parser.new(server)
+    parser_possibilities
+
     request_lines = (["POST /start_game HTTP/1.1", "Host: 127.0.0.1:9292", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,​*/*​;q=0.8", "Accept-Language: en-us", "Connection: keep-alive", "Accept-Encoding: gzip, deflate", "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/601.6.17 (KHTML, like Gecko) Version/9.1.1 Safari/601.6.17"])
 
     assert_equal "Verb: POST", parser.get_verb(request_lines)
@@ -94,4 +90,8 @@ class ParserTest < Minitest::Test
     assert_equal "Good luck!", parser.final_response(request_lines)
   end
 
+end
+
+if __FILE__ == $0
+server = Server.new
 end
