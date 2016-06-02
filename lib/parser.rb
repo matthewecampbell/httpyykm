@@ -1,16 +1,20 @@
 require 'pry'
-require "./lib/router"
 
 class Parser
-  attr_reader     :request_lines
+  attr_reader     :request_lines,
+                  :router,
+                  :server
+
+  def initialize(server)
+    @server = server
+  end
 
   def get_verb(request_lines)
     "Verb: #{request_lines[0].split[0]}"
   end
 
   def get_path(request_lines)
-    router = Router.new(request_lines[0].split[1])
-    router.determine_path
+    server.router.determine_path(request_lines[0].split[0], request_lines[0].split[1])
   end
 
   def get_protocol(request_lines)
@@ -39,6 +43,16 @@ class Parser
     "Accept:#{accept.split(":")[1]}"
   end
 
+  def get_content_length(request_lines)
+    content_length = ""
+    request_lines.each do |element|
+      if element.include?("Content-Length:")
+      content_length += element
+      end
+    end
+    "#{content_length.split(": ")[1]}".to_i
+  end
+
   def final_response(request_lines)
     if get_path(request_lines) == "/"
       ("\n") + get_verb(request_lines) + ("\n") +
@@ -52,4 +66,4 @@ class Parser
       get_path(request_lines)
     end
   end
-  end
+end

@@ -1,13 +1,23 @@
 require 'socket'
+require './lib/router'
 require './lib/parser'
+require './lib/game'
 require "pry"
 
 class Server
-  attr_reader       :request_lines, :tcp_server
+  attr_reader       :tcp_server,
+                    :router,
+                    :parser,
+                    :game
+                    :verb
+                    :path
+                    :guess
 
   def initialize
     @tcp_server     = TCPServer.new(9292)
-    @parser         = Parser.new
+    @game           = Game.new
+    @router         = Router.new(game)
+    @parser         = Parser.new(self)
   end
 
   def start
@@ -19,6 +29,16 @@ class Server
       request_lines = []
       while line = client.gets and !line.chomp.empty?
         request_lines << line.chomp
+      end #want to make method here to line 39
+      @verb = request_lines[0].split[0]
+      @path = request_lines[0].split[1]
+      num = @parser.get_content_length(request_lines)
+      read_client = client.read(num).split(" ")[4]
+      if read_client != nil && game.game_start
+        @guess = read_client.to_i
+        if router.determine_path(@verb, @path, @guess) == "Valid POST for /game"
+          game.record_guess(@guess)
+        end
       end
       puts "Got this request:"
       puts request_lines.inspect
@@ -40,11 +60,20 @@ class Server
   end
 
   def header(output)
-    ["http/1.1 200 ok",
+    if router.determine_path(@verb, @path, @guess) == "Valid POST for /game"
+    ["http/1.1 301 Moved Permanently",
+      "Location: http://127.0.0.1:9292/game",
       "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
       "server: ruby",
       "content-type: text/html; charset=iso-8859-1",
       "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+    else
+      ["http/1.1 200 ok",
+      "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+      "server: ruby",
+      "content-type: text/html; charset=iso-8859-1",
+      "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+    end
   end
 
   def find_output(type, arg)
