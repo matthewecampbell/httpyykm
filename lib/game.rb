@@ -2,8 +2,10 @@ class Game
 attr_reader :guesses,
             :guess_counter,
             :randnum
+attr_accessor :game_start
 
   def initialize
+    @game_start = false
     @guesses = []
     @guess_counter = guesses.count
     @randnum = randnum ||= rand(1..100)
@@ -12,6 +14,8 @@ attr_reader :guesses,
   def record_guess(guess)
     guesses << guess
   end
+
+
 
 #   def check_guess_count
 #     if guess_count == 0

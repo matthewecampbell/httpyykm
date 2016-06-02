@@ -12,9 +12,9 @@ class Server
 
   def initialize
     @tcp_server     = TCPServer.new(9292)
-    @router         = Router.new
-    @parser         = Parser.new(self)
     @game           = Game.new
+    @router         = Router.new(game)
+    @parser         = Parser.new(self)
   end
 
   def start
@@ -26,12 +26,12 @@ class Server
       request_lines = []
       while line = client.gets and !line.chomp.empty?
         request_lines << line.chomp
-      end
+      end #want to make method here to line 39
       verb = request_lines[0].split[0]
       path = request_lines[0].split[1]
       num = @parser.get_content_length(request_lines)
       read_client = client.read(num).split(" ")[4]
-      if read_client != nil
+      if read_client != nil && game.game_start
         guess = read_client.to_i
         if router.determine_path(verb, path, guess) == "Valid POST for /game"
           game.record_guess(guess)
