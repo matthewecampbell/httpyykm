@@ -7,7 +7,8 @@ require "pry"
 class RouterTest < Minitest::Test
 attr_reader     :router
   def setup
-    @router = Router.new(self)
+    game = Game.new
+    @router = Router.new(game)
   end
 
   def test_if_path_is_just_slash
@@ -39,5 +40,9 @@ attr_reader     :router
 
   def test_start_game
     assert_equal "Good luck!", router.determine_path("POST", "/start_game")
+  end
+
+  def test_no_guesses_made
+    assert_equal "You have not made any guesses yet.", router.determine_path("GET", "/game")
   end
 end

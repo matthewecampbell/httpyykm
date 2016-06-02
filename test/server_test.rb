@@ -1,8 +1,8 @@
 require "minitest/autorun"
 require "minitest/pride"
-require "./lib/stuff"
 require 'faraday'
 require "pry"
+require './lib/server'
 
 class ServerTest < MiniTest::Test
 attr_reader      :conn
@@ -28,6 +28,5 @@ attr_reader      :conn
     assert_equal 200, connection.status
   end
 
-  def 
 
 end

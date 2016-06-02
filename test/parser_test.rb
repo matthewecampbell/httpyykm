@@ -72,7 +72,6 @@ class ParserTest < Minitest::Test
 
   def test_final_response_if_path_datetime
     parser = Parser.new(self)
-    binding.pry
 
     assert_instance_of String, parser.final_response(["POST /datetime HTTP/1.1", "Host: 127.0.0.1:9292", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,​*/*​;q=0.8", "Accept-Language: en-us", "Connection: keep-alive", "Accept-Encoding: gzip, deflate", "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/601.6.17 (KHTML, like Gecko) Version/9.1.1 Safari/601.6.17"])
   end
