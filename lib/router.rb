@@ -19,7 +19,11 @@ class Router
       game.game_start = true
       hash[path]
     elsif path.include?("/game") && verb == "GET"
-      game.check_guess_count
+      if game.guesses.count == 0
+        "You have not made any guesses yet."
+      else
+        "You have made #{game.guesses.count} guess(es). Your guess was #{game.guesses.last}. Your guess was #{game.check_guess}"
+      end
     elsif path.include?("/game") && verb == "POST" && guess != nil
       "Valid POST for /game"
     else

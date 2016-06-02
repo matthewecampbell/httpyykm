@@ -62,23 +62,8 @@ class Parser
       get_port(request_lines) + ("\n") +
       get_origin(request_lines) + ("\n") +
       get_accept(request_lines) + ("\n")
-    elsif get_path(request_lines) == "redirect"
-      redirect
     else
       get_path(request_lines)
     end
   end
-  end
-
-  def redirect
-    "HTTP/1.1 301 Moved Permanently
-    Location: http://127.0.0.1:9292/game
-    Content-Type: text/html; charset=UTF-8
-    Date: Fri, 26 Feb 2016 01:55:24 GMT
-    Expires: Sun, 27 Mar 2016 01:55:24 GMT
-    Cache-Control: public, max-age=2592000
-    Server: gws
-    Content-Length: 219
-    X-XSS-Protection: 1; mode=block
-    X-Frame-Options: SAMEORIGIN"
-  end
+end
