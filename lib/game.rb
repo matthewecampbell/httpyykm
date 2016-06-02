@@ -1,15 +1,30 @@
 class Game
-attr_reader :guesses,
-            :randnum
+attr_reader :randnum,
+            :guess_count
 
   def initialize
-    @guesses = []
-    @randnum = rand(1..100)
+    @guess_count = 0
+    @randnum = randnum ||= rand(1..100)
   end
 
-  def record_guess(guess)
-    guesses << guess
+  def check_guess_count
+    if guess_count == 0
+      client.puts "#{guess_count} guess"
+    elsif guess_count > 0
+      feedback(guess)
+    end
   end
+
+  def feedback(guess)
+    if guess == randnum
+      client.puts "Correct!"
+    elsif guess < randnum
+      client.puts "Too low."
+    elsif guess > randnum
+      client.puts "Too high."
+    end
+  end
+
 
   # def check_guess
   #  if guesses.last == randnum

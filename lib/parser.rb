@@ -1,16 +1,20 @@
 require 'pry'
-require "./lib/router"
 
 class Parser
-  attr_reader     :request_lines
+  attr_reader     :request_lines,
+                  :router,
+                  :server
+
+  def initialize(server)
+    @server = server
+  end
 
   def get_verb(request_lines)
     "Verb: #{request_lines[0].split[0]}"
   end
 
   def get_path(request_lines)
-    router = Router.new(request_lines[0].split[0], request_lines[0].split[1])
-    router.determine_path
+    server.router.determine_path(request_lines[0].split[0], request_lines[0].split[1])
   end
 
   def get_protocol(request_lines)
@@ -64,6 +68,10 @@ class Parser
       get_path(request_lines)
     end
   end
+  end
+
+  def pass_guess(guess)
+    server.router.accept_guess(guess)
   end
 
   def redirect
