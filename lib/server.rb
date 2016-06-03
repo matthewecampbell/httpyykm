@@ -31,9 +31,6 @@ class Server
         request_lines << line.chomp
       end #want to make method here to line 39
       store_guess(request_lines, client)
-      puts "Got this request:"
-      puts request_lines.inspect
-      puts "Sending response."
       response = @parser.final_response(request_lines)
       if response == "Hello, World"
         hello_counter += 1
@@ -43,10 +40,7 @@ class Server
       else
         output  = find_output(response, nil)
       end
-      client.puts header(output)
-      client.puts output
-      client.close
-      @tcp_server.close if response == "Total Requests:"
+      server_response(client, output, response)
     end
   end
 
@@ -91,5 +85,12 @@ class Server
       if router.determine_path(@verb, @path, @guess) == "Valid POST for /game"
         game.record_guess(@guess)
       end
+    end
+
+    def server_response(client, output, response)
+      client.puts header(output)
+      client.puts output
+      client.close
+      @tcp_server.close if response == "Total Requests:"
     end
   end
