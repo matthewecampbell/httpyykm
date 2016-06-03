@@ -16,8 +16,12 @@ class Router
     if path.include?("/word_search?word=")
       check_dictionary(path)
     elsif path.include?("/start_game") && verb == "POST"
+      if game.guesses.empty?
       game.game_start = true
       hash[path]
+      else
+        "Game is already started. Please make a guess"
+      end
     elsif path.include?("/game") && verb == "GET"
       if game.guesses.count == 0
         "You have not made any guesses yet."

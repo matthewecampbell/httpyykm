@@ -21,7 +21,7 @@ class Server
   end
 
   def start
-    hello_counter   = 0
+    @hello_counter   = 0
     counter         = 0
     loop do
       counter += 1
@@ -32,14 +32,7 @@ class Server
       end #want to make method here to line 39
       store_guess(request_lines, client)
       response = @parser.final_response(request_lines)
-      if response == "Hello, World"
-        hello_counter += 1
-        output = find_output("Hello, World", hello_counter)
-      elsif response == "Total Requests:"
-        output  = find_output("Total Requests:", counter)
-      else
-        output  = find_output(response, nil)
-      end
+      output = generate_output(response, counter)
       server_response(client, output, response)
     end
   end
@@ -92,5 +85,16 @@ class Server
       client.puts output
       client.close
       @tcp_server.close if response == "Total Requests:"
+    end
+
+    def generate_output(response, counter)
+      if response == "Hello, World"
+        @hello_counter += 1
+        output = find_output("Hello, World", @hello_counter)
+      elsif response == "Total Requests:"
+        output  = find_output("Total Requests:", counter)
+      else
+        output  = find_output(response, nil)
+      end
     end
   end
