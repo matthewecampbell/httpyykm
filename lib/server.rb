@@ -3,14 +3,16 @@ require './lib/router'
 require './lib/parser'
 require './lib/game'
 require "pry"
+require './lib/redirects'
 
 class Server
+  include Redirects
   attr_reader       :tcp_server,
                     :router,
                     :parser,
-                    :game
-                    :verb
-                    :path
+                    :game,
+                    :verb,
+                    :path,
                     :guess
 
   def initialize
@@ -39,18 +41,9 @@ class Server
 
   def header(output)
     if router.determine_path(@verb, @path, @guess) == "Valid POST for /game"
-    ["http/1.1 301 Moved Permanently",
-      "Location: http://127.0.0.1:9292/game",
-      "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
-      "server: ruby",
-      "content-type: text/html; charset=iso-8859-1",
-      "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+      self.guess_redirect(output)
     else
-      ["http/1.1 200 ok",
-      "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
-      "server: ruby",
-      "content-type: text/html; charset=iso-8859-1",
-      "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+      self.default(output)
     end
   end
 
@@ -65,20 +58,19 @@ class Server
     end
       "<html><head></head><body><pre>#{response}</pre></body></html>"
     end
-  end
 
   def store_guess(request_lines, client)
     @verb = request_lines[0].split[0]
     @path = request_lines[0].split[1]
     num = @parser.get_content_length(request_lines)
     read_client = client.read(num).split(" ")[4]
-    # break into two smaller methods = end at 43 (client)
     if read_client != nil && game.game_start
       @guess = read_client.to_i
       if router.determine_path(@verb, @path, @guess) == "Valid POST for /game"
         game.record_guess(@guess)
       end
     end
+  end
 
     def server_response(client, output, response)
       client.puts header(output)
