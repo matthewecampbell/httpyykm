@@ -30,16 +30,7 @@ class Server
       while line = client.gets and !line.chomp.empty?
         request_lines << line.chomp
       end #want to make method here to line 39
-      @verb = request_lines[0].split[0]
-      @path = request_lines[0].split[1]
-      num = @parser.get_content_length(request_lines)
-      read_client = client.read(num).split(" ")[4]
-      if read_client != nil && game.game_start
-        @guess = read_client.to_i
-        if router.determine_path(@verb, @path, @guess) == "Valid POST for /game"
-          game.record_guess(@guess)
-        end
-      end
+      store_guess(request_lines, client)
       puts "Got this request:"
       puts request_lines.inspect
       puts "Sending response."
@@ -86,5 +77,19 @@ class Server
       response = type
     end
       "<html><head></head><body><pre>#{response}</pre></body></html>"
+    end
+  end
+
+  def store_guess(request_lines, client)
+    @verb = request_lines[0].split[0]
+    @path = request_lines[0].split[1]
+    num = @parser.get_content_length(request_lines)
+    read_client = client.read(num).split(" ")[4]
+    # break into two smaller methods = end at 43 (client)
+    if read_client != nil && game.game_start
+      @guess = read_client.to_i
+      if router.determine_path(@verb, @path, @guess) == "Valid POST for /game"
+        game.record_guess(@guess)
+      end
     end
   end
