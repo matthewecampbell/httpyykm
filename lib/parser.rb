@@ -1,12 +1,10 @@
-require 'pry'
-
 class Parser
   attr_reader     :request_lines,
                   :router,
                   :server
 
   def initialize(server)
-    @server = server
+    @server       = server
   end
 
   def get_verb(request_lines)

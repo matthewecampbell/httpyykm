@@ -1,6 +1,6 @@
 module Redirects
   def guess_redirect(output)
-     ["http/1.1 301 Moved Permanently",
+     ["http/1.1 302 Moved Permanently",
       "Location: http://127.0.0.1:9292/game",
       "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
       "server: ruby",

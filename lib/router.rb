@@ -1,5 +1,4 @@
 require "./lib/game"
-require "pry"
 
 class Router
   attr_reader       :verb,
@@ -8,8 +7,13 @@ class Router
                     :game
 
   def initialize(game)
-    @game = game
-    @hash              = {"/" => "/", "/hello" => "Hello, World", "/datetime" => Time.now.strftime("%I:%M%p on %A, %b %e, %Y"), "/shutdown" => "Total Requests:", "/start_game" => "Good luck!", "/game?guess" => "redirect"}
+    @game            = game
+    @hash            = {
+                "/"  => "/",
+            "/hello" => "Hello, World",
+         "/datetime" => Time.now.strftime("%I:%M%p on %A, %b %e, %Y"),
+         "/shutdown" => "Total Requests:",
+       "/start_game" => "Good luck!"}
   end
 
   def determine_path(verb, path, guess = nil)
@@ -17,8 +21,8 @@ class Router
       check_dictionary(path)
     elsif path.include?("/start_game") && verb == "POST"
       if game.guesses.empty?
-      game.game_start = true
-      hash[path]
+        game.game_start = true
+        hash[path]
       else
         "Game is already started. Please make a guess"
       end
@@ -48,6 +52,4 @@ class Router
     end
     response
   end
-
-
 end

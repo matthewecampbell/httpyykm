@@ -1,8 +1,8 @@
 require "minitest/autorun"
 require "minitest/pride"
-require "./lib/stuff"
 require 'faraday'
 require "pry"
+require './lib/server'
 
 class ServerTest < MiniTest::Test
 attr_reader      :conn
@@ -28,6 +28,14 @@ attr_reader      :conn
     assert_equal 200, connection.status
   end
 
-  def 
+  def test_faraday_status_when_make_guess
+    connection = Faraday.post("http://127.0.0.1:9292/game", :guess => "8")
+    assert_equal 200, connection.status
+  end
+
+  def test_body
+    connection = Faraday.post("http://127.0.0.1:9292/game", :guess => "8")
+    assert_instance_of String , connection.body
+  end
 
 end
