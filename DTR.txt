@@ -1,0 +1,20 @@
+# httpyykm
+
+Expectations:
+Staying after today to start.
+All day tomorrow (Saturday) - meeting at 10 am, stopping whenever
+Every single day next week after wrap up until 10 pm max on Monday and Tuesday. Then Wednesday till whenever.
+Goal be finished by Wednesday night, refactoring on Thursday.
+
+Learning Goals:
+Why are we doing what we're doing? How does the code communicate with the server?
+We've mutually decided not to divide and conquer, we're going to physically be present with each other and working on the the code together.
+Be conscious of not having one person driving all the time, and one person listening. Set a 50 minute pom, break, and then alternate driving. Even the person who is driving needs to talk out what he/she is doing.
+Both of us like it when the person who is not driving provides input. 
+Possible challenge: we both know that we have a tendency to get into hyper focus.
+If one of us says we're done, and the other person is in the zone, then perhaps the zoned in person needs to just keep going, but the zoned in person ought to comment the hell out of what they do so the other person can follow.
+We've agreed to be honest and respectful in feedback, but beat around the bush, directness is preferred.
+Sonia's strengths = complex enumerables, Matt's strengths = good at stepping back and figuring out a good way to attack the problem. Sonia's and Matt's weaknesses = WTF is faraday and gems in general, how to use. 
+Tools to use to manage the project: atom, curl, pry, postman maybe?, notetaking software, whiteboarding, google.
+Running into problems with the project - first stop is google, if that still fails, then find someone  to ask for help.
+We will know this project is successful if the requests are successfully accepted and the responses are successfully sent. GOAL: at least 3s on every section of the rubric.
